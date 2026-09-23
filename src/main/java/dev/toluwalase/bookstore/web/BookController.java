@@ -2,6 +2,7 @@ package dev.toluwalase.bookstore.web;
 
 import dev.toluwalase.bookstore.model.Book;
 import dev.toluwalase.bookstore.model.BookRepository;
+import dev.toluwalase.bookstore.model.CategoryRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,15 +10,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-@Controller 
-@RequestMapping 
+@Controller
+@RequestMapping
 public class BookController {
 
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
 
-    BookController(BookRepository bookRepository) {
+    BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
         this.bookRepository = bookRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/index")
@@ -34,6 +36,7 @@ public class BookController {
     @GetMapping("/add")
     public String addBook(Model model) {
         model.addAttribute("book", new Book());
+        model.addAttribute("categories", categoryRepository.findAll());
 
         return "addbook";
     }
@@ -41,7 +44,7 @@ public class BookController {
     @PostMapping("/save")
     public String saveBook(Book book) {
         bookRepository.save(book);
-        
+
         return "redirect:booklist";
     }
 
@@ -54,7 +57,8 @@ public class BookController {
     @GetMapping("/edit/{id}")
     public String editBook(@PathVariable("id") Long bookId, Model model) {
         model.addAttribute("book", bookRepository.findById(bookId).orElse(null));
+        model.addAttribute("categories", categoryRepository.findAll());
         return "editbook";
     }
-    
+
 }
