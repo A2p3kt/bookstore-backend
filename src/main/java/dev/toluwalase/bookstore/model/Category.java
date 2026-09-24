@@ -3,6 +3,9 @@ package dev.toluwalase.bookstore.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +19,8 @@ public class Category {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @JsonIgnore 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Book> books = new ArrayList<>();
 
     public Category() {
