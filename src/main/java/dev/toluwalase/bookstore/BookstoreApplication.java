@@ -4,11 +4,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import dev.toluwalase.bookstore.model.Book;
+import dev.toluwalase.bookstore.model.User;
 import dev.toluwalase.bookstore.model.BookRepository;
 import dev.toluwalase.bookstore.model.Category;
 import dev.toluwalase.bookstore.model.CategoryRepository;
+import dev.toluwalase.bookstore.model.UserRepository;
 
 @SpringBootApplication
 public class BookstoreApplication {
@@ -18,7 +21,7 @@ public class BookstoreApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(BookRepository repository, CategoryRepository categoryRepository) {
+	public CommandLineRunner demo(BookRepository repository, CategoryRepository categoryRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
 			Category fiction = categoryRepository.save(new Category("Fiction"));
 			Category classic = categoryRepository.save(new Category("Classic"));
@@ -64,6 +67,17 @@ public class BookstoreApplication {
 			Book alchemist = new Book("The Alchemist", "Paulo Coelho", 1988, "978-0062315007", 12.49f);
 			alchemist.setCategory(fiction);
 			repository.save(alchemist);
+
+			// Hash the passwords using BCrypt
+            String userHash = passwordEncoder.encode("user123");
+            String adminHash = passwordEncoder.encode("admin123");
+
+            // Save users with their respective roles
+            User regularUser = new User("user", userHash, "USER");
+            User adminUser = new User("admin", adminHash, "ADMIN");
+
+            userRepository.save(regularUser);
+            userRepository.save(adminUser);
 		};
 	}
 
