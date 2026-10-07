@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
   <head>
-    <title>Server Programming with Spring Boot</title>
+    <title>Book List</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link
       type="text/css"
@@ -11,7 +13,11 @@
     />
   </head>
   <body>
-    <h1>Books</h1>
+    <h1>Hello <span sec:authentication="name"></span>, Welcome to the Bookstore</h1>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sign Out</button>
+    </form>
+
     <table class="table table-striped">
       <tr>
         <th>Author</th>
@@ -34,6 +40,7 @@
             >Edit</a
           >
           <a
+            sec:authorize="hasRole('ADMIN')"
             th:href="@{/delete/{id}(id=${book.id})}"
             class="btn btn-danger btn-sm"
             >Delete</a
