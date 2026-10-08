@@ -24,12 +24,13 @@ public class BookController {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
 
-    BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
+    public BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
         this.bookRepository = bookRepository;
         this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/index")
+    @ResponseBody 
     public String index() {
         return "Welcome to the bookstore";
     }
@@ -62,7 +63,7 @@ public class BookController {
     }
 
     @PreAuthorize ("hasRole('ADMIN')")
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteBook(@PathVariable("id") Long bookId) {
         bookRepository.deleteById(bookId);
         return "redirect:/booklist";
