@@ -17,21 +17,20 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
         .authorizeHttpRequests( authorize -> authorize
-        .requestMatchers("/index").permitAll()
-        .anyRequest().authenticated()
+            .requestMatchers("/css/**", "/images/**", "/js/**", "/index", "/signup", "/saveuser").permitAll()
+            .anyRequest().authenticated()
         )
         .formLogin( formlogin -> formlogin
-        .loginPage("/login")
-        .defaultSuccessUrl("/booklist", true)
-        .permitAll()
+            .loginPage("/login")
+            .defaultSuccessUrl("/booklist", true)
+            .permitAll()
         )
         .logout( logout -> logout
-        .permitAll()
+            .permitAll()
         );
         return http.build();
     }

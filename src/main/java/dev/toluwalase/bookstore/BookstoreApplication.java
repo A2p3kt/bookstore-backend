@@ -22,8 +22,9 @@ public class BookstoreApplication {
 	}
 
 	@Bean
-	@Profile ("seed")
-	public CommandLineRunner demo(BookRepository repository, CategoryRepository categoryRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	@Profile("seed")
+	public CommandLineRunner demo(BookRepository repository, CategoryRepository categoryRepository,
+			UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
 			Category fiction = categoryRepository.save(new Category("Fiction"));
 			Category classic = categoryRepository.save(new Category("Classic"));
@@ -70,16 +71,19 @@ public class BookstoreApplication {
 			alchemist.setCategory(fiction);
 			repository.save(alchemist);
 
-			// Hash the passwords using BCrypt
-            String userHash = passwordEncoder.encode("user123");
-            String adminHash = passwordEncoder.encode("admin123");
+			// Check and create regular user
+			if (userRepository.findByUsername("user") == null) {
+				String userHash = passwordEncoder.encode("user123");
+				User regularUser = new User("user", userHash, "USER");
+				userRepository.save(regularUser);
+			}
 
-            // Save users with their respective roles
-            User regularUser = new User("user", userHash, "USER");
-            User adminUser = new User("admin", adminHash, "ADMIN");
-
-            userRepository.save(regularUser);
-            userRepository.save(adminUser);
+			// Check and create admin user
+			if (userRepository.findByUsername("admin") == null) {
+				String adminHash = passwordEncoder.encode("admin123");
+				User adminUser = new User("admin", adminHash, "ADMIN");
+				userRepository.save(adminUser);
+			}
 		};
 	}
 

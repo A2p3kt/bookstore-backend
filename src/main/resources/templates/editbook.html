@@ -1,62 +1,169 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
   <head>
-    <title>Edit Book</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Book - Bookstore</title>
     <link
       type="text/css"
       rel="stylesheet"
       href="/css/bootstrap.min.css"
       th:href="@{/css/bootstrap.min.css}"
     />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="/css/custom.css"
+      th:href="@{/css/custom.css}"
+    />
   </head>
   <body>
-    <h1>Edit Book</h1>
-    <div>
-      <form th:object="${book}" th:action="@{/save}" method="post">
-        <input type="hidden" th:field="*{id}" />
+    <!-- Top Navigation Bar -->
+    <header>
+      <nav class="navbar-custom">
+        <div class="container d-flex justify-content-between align-items-center">
+          <a class="navbar-brand-custom" th:href="@{/booklist}">
+            <div class="brand-icon-box">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+              </svg>
+            </div>
+            <span>Bookstore</span>
+          </a>
 
-        <div>
-          <label for="title">Title</label>
-          <input type="text" id="title" th:field="*{title}" required />
+          <a th:href="@{/booklist}" class="btn btn-sm btn-secondary-custom">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            <span>Back to Books</span>
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5 flex-grow-1">
+      <div class="custom-card form-card">
+        <div class="custom-card-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="brand-icon-box" style="width: 32px; height: 32px; border-radius: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="h5 fw-bold mb-0 text-dark">Edit Book</h1>
+              <p class="text-muted small mb-0">Update the book information below and save your changes</p>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label for="author">Author</label>
-          <input type="text" id="author" th:field="*{author}" required />
-        </div>
+        <div class="custom-card-body">
+          <form th:object="${book}" th:action="@{/save}" method="post">
+            <input type="hidden" th:field="*{id}" />
 
-        <div>
-          <label for="year">Publication Year</label>
-          <input type="number" id="year" th:field="*{publicationYear}" />
-        </div>
+            <div class="row g-3">
+              <!-- Title -->
+              <div class="col-12">
+                <label for="title" class="form-label-custom">Title <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  id="title"
+                  class="form-control-custom"
+                  th:field="*{title}"
+                  placeholder="e.g. The Great Gatsby"
+                  required
+                />
+              </div>
 
-        <div>
-          <label for="isbn">ISBN</label>
-          <input type="text" id="isbn" th:field="*{isbn}" />
-        </div>
+              <!-- Author -->
+              <div class="col-md-6">
+                <label for="author" class="form-label-custom">Author <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  id="author"
+                  class="form-control-custom"
+                  th:field="*{author}"
+                  placeholder="e.g. F. Scott Fitzgerald"
+                  required
+                />
+              </div>
 
-        <div>
-          <label for="price">Price</label>
-          <input type="number" step="0.01" id="price" th:field="*{price}" />
-        </div>
+              <!-- Category -->
+              <div class="col-md-6">
+                <label for="category" class="form-label-custom">Category <span class="text-danger">*</span></label>
+                <select id="category" class="form-select-custom" th:field="*{category}" required>
+                  <option value="">Select a category</option>
+                  <option
+                    th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}"
+                  ></option>
+                </select>
+              </div>
 
-        <div>
-          <label for="category">Category</label>
-          <select id="category" th:field="*{category}" required>
-            <option value="">Select a category</option>
-            <option
-              th:each="category : ${categories}"
-              th:value="${category.id}"
-              th:text="${category.name}"
-            ></option>
-          </select>
-        </div>
+              <!-- ISBN -->
+              <div class="col-md-6">
+                <label for="isbn" class="form-label-custom">ISBN</label>
+                <input
+                  type="text"
+                  id="isbn"
+                  class="form-control-custom"
+                  th:field="*{isbn}"
+                  placeholder="e.g. 978-0743273565"
+                />
+              </div>
 
-        <div style="margin-top: 10px">
-          <input type="submit" value="Save Changes" />
+              <!-- Publication Year -->
+              <div class="col-md-3">
+                <label for="year" class="form-label-custom">Year</label>
+                <input
+                  type="number"
+                  id="year"
+                  class="form-control-custom"
+                  th:field="*{publicationYear}"
+                  placeholder="e.g. 1925"
+                />
+              </div>
+
+              <!-- Price -->
+              <div class="col-md-3">
+                <label for="price" class="form-label-custom">Price ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  id="price"
+                  class="form-control-custom"
+                  th:field="*{price}"
+                  placeholder="e.g. 10.50"
+                />
+              </div>
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="d-flex align-items-center justify-content-end gap-2 mt-4 pt-3 border-top">
+              <a th:href="@{/booklist}" class="btn-secondary-custom">
+                Cancel
+              </a>
+              <button type="submit" class="btn-primary-custom">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                </svg>
+                <span>Save Changes</span>
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span>&copy; Bookstore Management System</span>
+        <span class="text-muted">Spring Boot &bull; Thymeleaf &bull; Clean UI</span>
+      </div>
+    </footer>
   </body>
 </html>

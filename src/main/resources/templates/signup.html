@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up - Bookstore</title>
+  <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+  <link type="text/css" rel="stylesheet" href="/css/custom.css" th:href="@{/css/custom.css}" />
+</head>
+
+<body>
+  <div class="login-page-wrapper">
+    <div class="login-card" style="max-width: 480px;">
+      <!-- Brand Header -->
+      <div class="login-brand-header">
+        <div class="login-brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+            <path
+              d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
+          </svg>
+        </div>
+        <h1 class="h4 fw-bold text-dark mb-1">Create an Account</h1>
+        <p class="text-muted small mb-0">Register with your chosen user role</p>
+      </div>
+
+      <!-- Error Alert -->
+      <div th:if="${errorMessage}" class="alert alert-danger py-2 px-3 d-flex align-items-center gap-2 mb-3 rounded-3"
+        role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="flex-shrink-0"
+          viewBox="0 0 16 16">
+          <path
+            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </svg>
+        <div class="small" th:text="${errorMessage}">Registration error</div>
+      </div>
+
+      <!-- Registration Form -->
+      <form th:object="${signupform}" th:action="@{/saveuser}" method="post">
+        <!-- Username -->
+        <div class="mb-3">
+          <label for="username" class="form-label-custom">Username <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                  d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+              </svg>
+            </span>
+            <input type="text" id="username" th:field="*{username}" class="form-control-custom border-start-0"
+              placeholder="Choose a username" required autofocus />
+          </div>
+          <div class="text-danger small mt-1" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label-custom">Password <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                  d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
+              </svg>
+            </span>
+            <input type="password" id="password" th:field="*{password}" class="form-control-custom border-start-0"
+              placeholder="Create a password" required />
+          </div>
+          <div class="text-danger small mt-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-3">
+          <label for="passwordCheck" class="form-label-custom">Confirm Password <span
+              class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                  d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
+              </svg>
+            </span>
+            <input type="password" id="passwordCheck" th:field="*{passwordCheck}"
+              class="form-control-custom border-start-0" placeholder="Re-enter your password" required />
+          </div>
+          <div class="text-danger small mt-1" th:if="${#fields.hasErrors('passwordCheck')}"
+            th:errors="*{passwordCheck}"></div>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="mb-4">
+          <label for="role" class="form-label-custom">Role</label>
+          <select id="role" th:field="*{role}" class="form-select-custom">
+            <option value="USER">USER (Standard - can view &amp; edit books)</option>
+            <option value="ADMIN">ADMIN (Full Access - can also delete books)</option>
+          </select>
+          <div class="form-text text-muted small mt-1">
+            Note: Only users with the <strong>ADMIN</strong> role can delete books.
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary-custom w-100 justify-content-center py-2 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path
+              d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+          </svg>
+          <span>Register Account</span>
+        </button>
+
+        <!-- Back to Login Link -->
+        <div class="text-center pt-2 border-top">
+          <span class="text-muted small">Already have an account? </span>
+          <a th:href="@{/login}" class="small fw-semibold text-primary text-decoration-none">Sign In here</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
